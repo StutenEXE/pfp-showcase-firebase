@@ -1,1 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+$background: #16161a;
+$headline: #fffffe;
+$paragraph: #94a1b2;
+$primary: #2cb67d;
+
+body {
+    background-color: $background;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: $headline;
+}
+
+p {
+    color: $paragraph;
+}
