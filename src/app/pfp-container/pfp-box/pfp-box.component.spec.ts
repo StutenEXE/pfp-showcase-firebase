@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PfpComponent } from './pfp.component';
+import { PfpBoxComponent } from './pfp-box.component';
 
 describe('PfpComponent', () => {
-  let component: PfpComponent;
-  let fixture: ComponentFixture<PfpComponent>;
+  let component: PfpBoxComponent;
+  let fixture: ComponentFixture<PfpBoxComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PfpComponent]
+      imports: [PfpBoxComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(PfpComponent);
+    fixture = TestBed.createComponent(PfpBoxComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

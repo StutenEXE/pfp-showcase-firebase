@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
 import { PfpContainerComponent } from './pfp-container/pfp-container.component';
-import { PfpComponent } from './pfp-container/pfp/pfp.component';
+import { PfpBoxComponent } from './pfp-container/pfp-box/pfp-box.component';
 import { BrowserModule } from '@angular/platform-browser';
 
 
@@ -11,7 +11,7 @@ import { BrowserModule } from '@angular/platform-browser';
   declarations: [
     AppComponent,
     PfpContainerComponent,
-    PfpComponent,
+    PfpBoxComponent,
   ],
   imports: [
     CommonModule,

@@ -1,1 +1,11 @@
-<p>pfp-container works!</p>
+<div>
+    <h3>{{ pfpsFiltered.length }}/{{ pfps.length }}</h3>
+    <button (click)="currentSize = Size.SMALL">Small</button>
+    <button (click)="currentSize = Size.MEDIUM">Medium</button>
+    <button (click)="currentSize = Size.LARGE">Large</button>
+    <div class="pfp-container">
+        <ng-container *ngFor="let pfp of pfpsFiltered">
+            <app-pfp-box [pfp]="pfp" [size]="currentSize"></app-pfp-box>
+        </ng-container>
+    </div>
+</div>

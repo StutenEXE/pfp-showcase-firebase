@@ -1,0 +1,22 @@
+<div class="pfp-box-frame" [class]="size" (click)="showHuge = true">
+    <img class="pfp-box" [class]="size" [src]="pfp.getUrl()" [alt]="'Couldn\'t find the following pfp : ' + pfp.name" />
+    <div class="pfp-box-details">
+        <p>Name : {{ pfp.name }}</p>
+        <p>Date : {{ pfp.uploadDate | date:"dd/MM/yyyy" }}</p>
+        <p>Size : {{ pfp.size }} bytes</p>
+    </div>
+</div>
+<!-- Huge pfp -->
+<div *ngIf="showHuge" class="hugePfp" (click)="showHuge = false">
+    <div class="huge-pfp-content">
+        <img class="huge-pfp-box" [src]="pfp.getUrl()" [alt]="'Couldn\'t find the following pfp : ' + pfp.name" />
+        <div class="huge-pfp-box-details">
+            <div class="huge-info">
+                <h3>Name : {{ pfp.name }}</h3>
+                <h3>Date : {{ pfp.uploadDate | date:"dd/MM/yyyy" }}</h3>
+                <h3>Size : {{ pfp.size }} bytes</h3>
+            </div>
+            <button class="huge-download" (click)="download($event)">Download</button>
+        </div>
+    </div>
+</div>
