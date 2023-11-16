@@ -21,7 +21,8 @@ h6 {
     color: var(--headline);
 }
 
-p {
+p, a {
     margin: 0;
-    color: var(--paragraph);
+    color: var(--headline);
+    text-decoration: none;
 }
