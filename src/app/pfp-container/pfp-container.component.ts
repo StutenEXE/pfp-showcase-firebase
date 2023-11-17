@@ -50,5 +50,12 @@ export class PfpContainerComponent implements OnInit {
     this.pfpsFiltered = this.pfps;
   }
 
+
+
+  filter(event: any) {
+    let nameFilter = event.target.value.trim().toLowerCase();
+    this.pfpsFiltered = this.pfps.filter(pfp => pfp.name.trim().toLowerCase().includes(nameFilter))
+  }
+
 }
 

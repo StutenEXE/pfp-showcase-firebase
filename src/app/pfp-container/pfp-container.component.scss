@@ -8,3 +8,14 @@
     flex-wrap: wrap;
     gap: 30px;
 }
+
+.options {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin: 20px 30px;
+}
+
+.count-pfp {
+    margin-left: auto;
+}
