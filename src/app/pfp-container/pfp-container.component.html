@@ -1,11 +1,11 @@
 <div>
     <div class="options">
-        <div class="display-size">
-            <button (click)="currentSize = Size.SMALL">Small</button>
-            <button (click)="currentSize = Size.MEDIUM">Medium</button>
-            <button (click)="currentSize = Size.LARGE">Large</button>
+        <div class="size-icon-container">
+            <img class="size-icon" [class]="currentSize == Size.SMALL ? 'selected' : ''" src="../../assets/icons/Ares_small.png" (click)="currentSize = Size.SMALL"/>
+            <img class="size-icon" [class]="currentSize == Size.MEDIUM ? 'selected' : ''" src="../../assets/icons/Ares_mid.png" (click)="currentSize = Size.MEDIUM"/>
+            <img class="size-icon" [class]="currentSize == Size.LARGE ? 'selected' : ''" src="../../assets/icons/Ares_big.png" (click)="currentSize = Size.LARGE">
         </div>
-        <input type="text" (keyup)="filter($event)">
+        <input type="text" (keyup)="filter($event)"/>
         <h3 class="count-pfp">{{ pfpsFiltered.length }}/{{ pfps.length }}</h3>
     </div>
     <div class="pfp-container">

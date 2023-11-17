@@ -19,3 +19,24 @@
 .count-pfp {
     margin-left: auto;
 }
+
+.size-icon-container {
+    display: flex;
+    gap: 5px;
+}
+
+.size-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 200ms ease-in-out;
+}
+
+.size-icon.selected {
+    background-color: #595959;
+}
+
+.size-icon:hover {
+    background-color: #818181;
+}
