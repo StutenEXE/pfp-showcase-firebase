@@ -8,7 +8,6 @@
     .large {
         width: 400px;
     }
-    height: auto;
     overflow: hidden;
     position: relative;
     display: flex;
@@ -83,24 +82,34 @@
 }
 
 .huge-pfp-content {
-    width: 60vw;
-    height: 27vw; // 45% of 60
+    min-width: 280px;
+    width: 50vw;
+    min-height: 60vh; 
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: 0;
     flex-wrap: wrap;
+    border-radius: 15px;
+    padding: 4px;
+    background-color: var(--secondary);
 }
 
 .huge-pfp-box {
     min-width: 270px;
     width: 45%;
-    max-height: 27vw;
+    min-height: 40%;
+    max-height: 50%;
     object-fit: scale-down;
     background-color: var(--primary);
-    border: 4px solid var(--secondary);
-    border-radius: 15px 0 0 15px;
+    border: 2px solid var(--primary);
+    @media (min-width: 1081px) {
+        border-radius: 15px 0 0 15px;
+    }
+    @media (max-width: 1080px) {
+        border-radius: 15px 15px 0 0;
+    }
 }
 
 .huge-pfp-box-details {
@@ -108,11 +117,11 @@
     width: 45%;
     aspect-ratio: 1;
     background-color: var(--secondary);
-    border: 4px solid var(--secondary);
-    border-radius: 0 15px 15px 0;
+    padding: 6px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    border-radius: 15px;
 }
 
 .huge-download {

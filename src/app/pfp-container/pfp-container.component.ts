@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { firebaseConfig } from '../../env/firebase.config';
 import { initializeApp } from "firebase/app";
-import { getStorage, ref, listAll, getMetadata } from "firebase/storage";
+import { getStorage, ref, listAll, getMetadata, getDownloadURL } from "firebase/storage";
 import { Pfp } from '../shared/models/pfp.model';
 import { Size } from '../shared/models/size.enum';
 
@@ -28,12 +28,23 @@ export class PfpContainerComponent implements OnInit {
     listAll(this.pfpsRef)
       .then(pfps => {
         pfps.items.forEach(pfpRef => {
+          let pfp = new Pfp();
+          pfp.name = pfpRef.name;
+
+          getDownloadURL(pfpRef)
+            .then(url => {
+              pfp.url = url
+            });
+
+
           getMetadata(pfpRef)
             .then(metadata => {
-              this.pfps.push(
-                new Pfp(pfpRef.name, new Date(metadata.timeCreated), metadata.size, Number(metadata.cacheControl))
-              );
-            })
+              pfp.uploadDate = new Date(metadata.timeCreated)
+              pfp.size = metadata.size
+              // Cache control contains an order for the pfpz
+              pfp.order = Number(metadata.cacheControl)
+            });
+          this.pfps.push(pfp);
         });
       })
     this.pfpsFiltered = this.pfps;
