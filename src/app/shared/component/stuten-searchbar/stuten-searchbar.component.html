@@ -1,4 +1,4 @@
-<div class="search-box">
+<div class="search-box" [class]="focused ? 'focused' : ''">
     <button class="btn-search"><img class="search-icon" src="../../../../assets/icons/AresSearch.png"></button>
-    <input class="input-search" (keyup)="keyUp.emit($event)">
+    <input class="input-search" placeholder="Type your search..." (keyup)="setFocused($event)">
 </div>

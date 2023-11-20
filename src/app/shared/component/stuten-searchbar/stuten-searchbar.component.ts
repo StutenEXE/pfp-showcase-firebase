@@ -8,5 +8,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class StutenSearchbarComponent {
   @Output() keyUp = new EventEmitter<KeyboardEvent>();
 
+  focused: boolean = false;
 
+  setFocused(event: any) {
+    this.focused = event.target.value.trim() !== "";
+    this.keyUp.emit(event);
+  }
 }

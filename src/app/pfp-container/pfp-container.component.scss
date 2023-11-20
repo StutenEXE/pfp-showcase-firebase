@@ -12,6 +12,7 @@
 .options {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap-reverse;
     gap: 15px;
     margin: 20px 30px;
 }
