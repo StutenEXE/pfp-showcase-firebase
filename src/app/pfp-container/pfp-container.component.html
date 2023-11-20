@@ -5,7 +5,8 @@
             <img class="size-icon" [class]="currentSize == Size.MEDIUM ? 'selected' : ''" src="../../assets/icons/Ares_mid.png" (click)="currentSize = Size.MEDIUM"/>
             <img class="size-icon" [class]="currentSize == Size.LARGE ? 'selected' : ''" src="../../assets/icons/Ares_big.png" (click)="currentSize = Size.LARGE">
         </div>
-        <input type="text" (keyup)="filter($event)"/>
+        <!-- <input type="text" (keyup)="filter($event)"/> -->
+        <app-stuten-searchbar (keyup)="filter($event)"></app-stuten-searchbar>
         <h3 class="count-pfp">{{ pfpsFiltered.length }}/{{ pfps.length }}</h3>
     </div>
     <div class="pfp-container">
