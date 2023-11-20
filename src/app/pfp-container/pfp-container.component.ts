@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { firebaseConfig } from '../../env/firebase.config';
 import { initializeApp } from "firebase/app";
-import { getStorage, ref, listAll, getMetadata, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, listAll, getMetadata, getDownloadURL, uploadBytes, UploadMetadata } from "firebase/storage";
 import { Pfp } from '../shared/models/pfp.model';
 import { Size } from '../shared/models/size.enum';
 
@@ -25,6 +25,12 @@ export class PfpContainerComponent implements OnInit {
   pfpsFiltered: Pfp[] = [];
 
   ngOnInit(): void {
+    this.loadPfps()
+  }
+
+  loadPfps() {
+    this.pfps = [];
+
     listAll(this.pfpsRef)
       .then(pfps => {
         pfps.items.forEach(pfpRef => {
@@ -35,7 +41,6 @@ export class PfpContainerComponent implements OnInit {
             .then(url => {
               pfp.url = url
             });
-
 
           getMetadata(pfpRef)
             .then(metadata => {
@@ -50,7 +55,21 @@ export class PfpContainerComponent implements OnInit {
     this.pfpsFiltered = this.pfps;
   }
 
-
+  uploadFile(event: any) {
+    console.log(event.target.files[0])
+    let file: File = event.target.files[0]
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+    reader.onload = () => {
+      if (reader.result) {
+        console.log(this.pfpsRef)
+        const blob = new Blob([reader.result], { type: file.type });
+        uploadBytes(ref(getStorage(this.app), `pfps/${file.name}`), blob).then((snapshot) => {
+          this.loadPfps();
+        });
+      }
+    };
+  }
 
   filter(event: any) {
     let nameFilter = event.target.value.trim().toLowerCase();

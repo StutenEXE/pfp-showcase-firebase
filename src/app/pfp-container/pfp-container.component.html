@@ -1,13 +1,19 @@
 <div>
     <div class="options">
         <div class="size-icon-container">
-            <img class="size-icon" [class]="currentSize == Size.SMALL ? 'selected' : ''" src="../../assets/icons/Ares_small.png" (click)="currentSize = Size.SMALL"/>
-            <img class="size-icon" [class]="currentSize == Size.MEDIUM ? 'selected' : ''" src="../../assets/icons/Ares_mid.png" (click)="currentSize = Size.MEDIUM"/>
-            <img class="size-icon" [class]="currentSize == Size.LARGE ? 'selected' : ''" src="../../assets/icons/Ares_big.png" (click)="currentSize = Size.LARGE">
+            <img class="size-icon" [class]="currentSize == Size.SMALL ? 'selected' : ''"
+                src="../../assets/icons/Ares_small.png" (click)="currentSize = Size.SMALL" />
+            <img class="size-icon" [class]="currentSize == Size.MEDIUM ? 'selected' : ''"
+                src="../../assets/icons/Ares_mid.png" (click)="currentSize = Size.MEDIUM" />
+            <img class="size-icon" [class]="currentSize == Size.LARGE ? 'selected' : ''"
+                src="../../assets/icons/Ares_big.png" (click)="currentSize = Size.LARGE">
         </div>
         <!-- <input type="text" (keyup)="filter($event)"/> -->
         <app-stuten-searchbar (keyup)="filter($event)"></app-stuten-searchbar>
-        <h3 class="count-pfp">{{ pfpsFiltered.length }}/{{ pfps.length }}</h3>
+        <div>
+            <h3 class="count-pfp">{{ pfpsFiltered.length }}/{{ pfps.length }}</h3>
+            <input type="file" accept="image/png, image/jpeg, image/gif" (change)="uploadFile($event)">
+        </div>
     </div>
     <div class="pfp-container">
         <ng-container *ngFor="let pfp of pfpsFiltered">
