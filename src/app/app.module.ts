@@ -5,8 +5,12 @@ import { PfpContainerComponent } from './pfp-container/pfp-container.component';
 import { PfpBoxComponent } from './pfp-container/pfp-box/pfp-box.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { StutenSearchbarComponent } from './shared/component/stuten-searchbar/stuten-searchbar.component';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { IdentityDialogComponent } from './shared/component/identity-dialog/identity-dialog.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
@@ -15,11 +19,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     PfpContainerComponent,
     PfpBoxComponent,
     StutenSearchbarComponent,
+    IdentityDialogComponent,
   ],
   imports: [
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDialogModule,
   ],
   providers: [ ],
   bootstrap: [AppComponent],

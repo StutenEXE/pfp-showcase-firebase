@@ -6,6 +6,8 @@ import { getStorage, ref, listAll, getMetadata, getDownloadURL, uploadBytes, Upl
 import { Pfp } from '../shared/models/pfp.model';
 import { Size } from '../shared/models/size.enum';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { IdentityDialogComponent } from '../shared/component/identity-dialog/identity-dialog.component';
 
 
 @Component({
@@ -26,7 +28,8 @@ export class PfpContainerComponent implements OnInit {
   pfps: Pfp[] = [];
   pfpsFiltered: Pfp[] = [];
 
-  constructor(private snackBar: MatSnackBar) { }
+  constructor(private snackBar: MatSnackBar,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.loadPfps()
@@ -66,19 +69,36 @@ export class PfpContainerComponent implements OnInit {
       this.snackBar.open('File cannot exceed 1Mo', undefined, { duration: 3000, panelClass: ["warning-snackbar"] });
     }
     else {
-      const reader = new FileReader();
-      reader.readAsArrayBuffer(file);
-      reader.onload = () => {
-        if (reader.result) {
-          console.log(this.pfpsRef)
-          const blob = new Blob([reader.result], { type: file.type });
-          uploadBytes(ref(getStorage(this.app), `pfps/${file.name}`), blob).then((snapshot) => {
-            this.loadPfps();
-          })
-          .then(() => this.snackBar.open('File uploaded succesfully !', undefined, { duration: 3000, panelClass: ["ok-snackbar"] }))
-          .catch(() => this.snackBar.open('An error occured during the upload, please try again', undefined, { duration: 3000, panelClass: ["error-snackbar"] }));
-        }
-      };
+      // We check if the user has authorization to upload
+      this.dialog.open(IdentityDialogComponent)
+        // Whe get password
+        .afterClosed().subscribe(result => {
+          if (!result) return;
+          // If pwd ok, we upload the file
+          if (result === firebaseConfig.adminOkPwd) {
+            const reader = new FileReader();
+            reader.readAsArrayBuffer(file);
+            // We read the file as a Blob and upload the bytes to the server
+            reader.onload = () => {
+              if (reader.result) {
+                const blob = new Blob([reader.result], { type: file.type });
+                uploadBytes(ref(getStorage(this.app), `pfps/${file.name}`), blob).then((snapshot) => {
+                  this.loadPfps();
+                })
+                  // Upload succesful
+                  .then(() => this.snackBar.open('File uploaded succesfully !', undefined, { duration: 3000, panelClass: ["ok-snackbar"] }))
+                  // Error during upload
+                  .catch((error) => {
+                    console.log(error);
+                    this.snackBar.open('An error occured during the upload, please try again', undefined, { duration: 3000, panelClass: ["error-snackbar"] })
+                  });
+              }
+            };
+          }
+          else {
+            this.snackBar.open('Wrong password...', undefined, { duration: 3000, panelClass: ["warning-snackbar"] })
+          }
+        });
     }
   }
 
