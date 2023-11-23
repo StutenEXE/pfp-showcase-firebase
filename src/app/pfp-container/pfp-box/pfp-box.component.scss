@@ -1,11 +1,12 @@
 .pfp-box-frame {
-    .small {
+    &.small {
         width: 200px;
+        min-width: 100%;
     }
-    .medium {
+    &.medium {
         width: 300px;
     }
-    .large {
+    &.large {
         width: 400px;
     }
     overflow: hidden;
@@ -20,15 +21,15 @@
 }
 
 .pfp-box {
-    .small {
+    &.small {
         max-width: 180px;
         max-height: 180px;
     }
-    .medium {
+    &.medium {
         max-width: 270px;
         max-height: 270px;
     }
-    .large {
+    &.large {
         max-width: 360px;
         max-height: 360px;
     }
