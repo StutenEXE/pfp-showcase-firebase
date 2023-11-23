@@ -1,3 +1,5 @@
+@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
+
 /* You can add global styles to this file, and also import other style files */
 :root {
     --background: #16161a;
@@ -22,8 +24,29 @@ h6 {
     color: var(--headline);
 }
 
-p, a {
+p,
+a {
     margin: 0;
     color: var(--headline);
     text-decoration: none;
+}
+
+.mat-mdc-snack-bar-container {
+    &.ok-snackbar {
+        --mdc-snackbar-container-color: #42be65;
+        --mat-mdc-snack-bar-button-color: #000;
+        --mdc-snackbar-supporting-text-color: #000;
+    }
+
+    &.error-snackbar {
+        --mdc-snackbar-container-color: #fa4d56;
+        --mat-mdc-snack-bar-button-color: #000;
+        --mdc-snackbar-supporting-text-color: #000;
+    }
+
+    &.warning-snackbar {
+        --mdc-snackbar-container-color: #f1c21b;
+        --mat-mdc-snack-bar-button-color: #000;
+        --mdc-snackbar-supporting-text-color: #000;
+    }
 }

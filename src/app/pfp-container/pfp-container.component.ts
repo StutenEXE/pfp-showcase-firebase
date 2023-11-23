@@ -5,6 +5,8 @@ import { initializeApp } from "firebase/app";
 import { getStorage, ref, listAll, getMetadata, getDownloadURL, uploadBytes, UploadMetadata } from "firebase/storage";
 import { Pfp } from '../shared/models/pfp.model';
 import { Size } from '../shared/models/size.enum';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-pfp-container',
@@ -12,8 +14,8 @@ import { Size } from '../shared/models/size.enum';
   styleUrl: './pfp-container.component.scss'
 })
 export class PfpContainerComponent implements OnInit {
-  // Allows the use of enum in HTML0
-  Size = Size
+  // Allows the use of enum in HTML
+  Size = Size;
 
   currentSize = Size.MEDIUM;
 
@@ -23,6 +25,8 @@ export class PfpContainerComponent implements OnInit {
 
   pfps: Pfp[] = [];
   pfpsFiltered: Pfp[] = [];
+
+  constructor(private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.loadPfps()
@@ -56,19 +60,26 @@ export class PfpContainerComponent implements OnInit {
   }
 
   uploadFile(event: any) {
-    console.log(event.target.files[0])
-    let file: File = event.target.files[0]
-    const reader = new FileReader();
-    reader.readAsArrayBuffer(file);
-    reader.onload = () => {
-      if (reader.result) {
-        console.log(this.pfpsRef)
-        const blob = new Blob([reader.result], { type: file.type });
-        uploadBytes(ref(getStorage(this.app), `pfps/${file.name}`), blob).then((snapshot) => {
-          this.loadPfps();
-        });
-      }
-    };
+    let file: File = event.target.files[0];
+    // 1000000 bytes = 1Mo
+    if (file.size > 1000000) {
+      this.snackBar.open('File cannot exceed 1Mo', undefined, { duration: 3000, panelClass: ["warning-snackbar"] });
+    }
+    else {
+      const reader = new FileReader();
+      reader.readAsArrayBuffer(file);
+      reader.onload = () => {
+        if (reader.result) {
+          console.log(this.pfpsRef)
+          const blob = new Blob([reader.result], { type: file.type });
+          uploadBytes(ref(getStorage(this.app), `pfps/${file.name}`), blob).then((snapshot) => {
+            this.loadPfps();
+          })
+          .then(() => this.snackBar.open('File uploaded succesfully !', undefined, { duration: 3000, panelClass: ["ok-snackbar"] }))
+          .catch(() => this.snackBar.open('An error occured during the upload, please try again', undefined, { duration: 3000, panelClass: ["error-snackbar"] }));
+        }
+      };
+    }
   }
 
   filter(event: any) {
