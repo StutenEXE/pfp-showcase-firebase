@@ -1,5 +1,6 @@
 <div>
     <div class="options">
+        <!-- Sizing -->
         <div class="size-icon-container">
             <img class="size-icon" [class]="currentSize == Size.SMALL ? 'selected' : ''"
                 src="../../assets/icons/Ares_small.png" (click)="currentSize = Size.SMALL" />
@@ -8,16 +9,23 @@
             <img class="size-icon" [class]="currentSize == Size.LARGE ? 'selected' : ''"
                 src="../../assets/icons/Ares_big.png" (click)="currentSize = Size.LARGE">
         </div>
-        <!-- <input type="text" (keyup)="filter($event)"/> -->
+        <!-- Searchbar -->
         <app-stuten-searchbar (keyup)="filter($event)"></app-stuten-searchbar>
+        <!-- End of line -->
         <div>
             <h3 class="count-pfp">{{ pfpsFiltered.length }}/{{ pfps.length }}</h3>
-            <input type="file" accept="image/png, image/jpeg, image/gif" (change)="uploadFile($event)">
+            <input id="selectPfp" type="file" accept="image/png, image/jpeg, image/gif" (change)="uploadFile($event)">
+            <input type="button" value="Browse..." onclick="document.getElementById('selectPfp').click();" />
         </div>
     </div>
     <div class="pfp-container">
         <ng-container *ngFor="let pfp of pfpsFiltered">
             <app-pfp-box [pfp]="pfp" [size]="currentSize"></app-pfp-box>
         </ng-container>
+    </div>
+
+    <!-- Filters div -->
+    <div class="filters">
+
     </div>
 </div>
