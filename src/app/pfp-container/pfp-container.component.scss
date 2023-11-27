@@ -12,14 +12,27 @@
 .options {
     position: sticky;
     top: 0;
+    // left: 30px;
     z-index: 2;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap-reverse;
     gap: 15px;
-    margin: 20px 30px;
-    background-color: var(--background);
+    padding: 20px 30px;
+    background-image: linear-gradient(to top, rgba(0,0,0,0), var(--background));
+
+    div {
+        width: 32;
+        display: flex;
+        justify-content: center;
+        :first-child {
+            justify-content: flex-start;
+        }
+        :last-child {
+            justify-content: flex-end;
+        }
+    }
 }
 
 .count-pfp {

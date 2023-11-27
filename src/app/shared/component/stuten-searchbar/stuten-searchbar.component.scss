@@ -35,7 +35,7 @@
 }
 
 .input-search::placeholder {
-    color: var(--paragraph);
+    color: var(--headline);
 }
 
 .search-box:focus-within, .search-box.focused {
@@ -43,7 +43,7 @@
         width: 300px;
         border-radius: 0px;
         background-color: transparent;
-        border-bottom: 1px solid var(--paragraph);
+        border-bottom: 1px solid var(--headline);
         transition: all 400ms ease-in-out;
     }
 
