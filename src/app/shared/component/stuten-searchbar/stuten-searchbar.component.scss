@@ -15,7 +15,12 @@
     border-style: none;
     cursor: pointer;
     border-radius: 50%;
-    transition: all 400ms ease-in-out;
+    transition: all 400ms ease-in-out, background-color 200ms ease-in-out, transform 200ms ease-in-out;
+}
+
+.btn-search:hover {
+    transform: scale(1.05);
+    background-color: var(--purple);
 }
 
 .search-icon {

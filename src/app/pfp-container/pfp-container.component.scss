@@ -20,28 +20,51 @@
     flex-wrap: wrap-reverse;
     gap: 15px;
     padding: 20px 30px;
-    background-image: linear-gradient(to top, rgba(0,0,0,0), var(--background));
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0), var(--background));
 
     div {
         width: 32;
         display: flex;
         justify-content: center;
+        align-items: center;
+        gap: 5px;
+
         :first-child {
             justify-content: flex-start;
         }
+
         :last-child {
             justify-content: flex-end;
         }
     }
 }
 
+
 .count-pfp {
     margin-left: auto;
 }
 
-.size-icon-container {
-    display: flex;
-    gap: 5px;
+#uploadPfpInput {
+    display: none;
+}
+
+.uploadPfpButton {
+    display: flex; 
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    border: none;
+    color: white;
+    font-size: 20px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: 200ms ease-in-out;
+}
+
+.uploadPfpButton:hover {
+    transform: scale(1.05);
+    background-color: var(--purple);
 }
 
 .size-icon {
@@ -58,8 +81,4 @@
 
 .size-icon:hover {
     background-color: #818181;
-}
-
-#selectPfp {
-    display: none;
 }

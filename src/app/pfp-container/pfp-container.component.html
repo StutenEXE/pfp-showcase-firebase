@@ -12,10 +12,12 @@
         <!-- Searchbar -->
         <app-stuten-searchbar (keyup)="filter($event)"></app-stuten-searchbar>
         <!-- End of line -->
-        <div>
+        <div class="end-of-header-container">
             <h3 class="count-pfp">{{ pfpsFiltered.length }}/{{ pfps.length }}</h3>
-            <input id="selectPfp" type="file" accept="image/png, image/jpeg, image/gif" (change)="uploadFile($event)">
-            <input type="button" value="Browse..." onclick="document.getElementById('selectPfp').click();" />
+            <input id="uploadPfpInput" type="file" accept="image/png, image/jpeg, image/gif" (change)="uploadFile($event)">
+            <button class="uploadPfpButton" (click)="openFileExplorerDialog()">
+                <fa-icon [icon]="faUpload" onclick="document.getElementById('selectPfp').click();"></fa-icon>
+            </button>
         </div>
     </div>
     <div class="pfp-container">

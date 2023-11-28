@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { faUpload } from '@fortawesome/free-solid-svg-icons';
 
 import { firebaseConfig } from '../../env/firebase.config';
 import { initializeApp } from "firebase/app";
@@ -18,6 +19,7 @@ import { IdentityDialogComponent } from '../shared/component/identity-dialog/ide
 export class PfpContainerComponent implements OnInit {
   // Allows the use of enum in HTML
   Size = Size;
+  faUpload = faUpload;
 
   currentSize = Size.MEDIUM;
 
@@ -105,6 +107,10 @@ export class PfpContainerComponent implements OnInit {
   filter(event: any) {
     let nameFilter = event.target.value.trim().toLowerCase();
     this.pfpsFiltered = this.pfps.filter(pfp => pfp.name.trim().toLowerCase().includes(nameFilter))
+  }
+
+  openFileExplorerDialog() {
+    document.getElementById('uploadPfpInput')?.click();
   }
 
 }
