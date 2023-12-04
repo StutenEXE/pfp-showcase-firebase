@@ -23,6 +23,12 @@ export class PfpContainerComponent implements OnInit {
 
   currentSize = Size.MEDIUM;
 
+  _titleFilter: string = "";
+  set titleFilter(event: any) {
+    this._titleFilter = event.target.value.toLowerCase();
+    this.filter()
+  }
+
   // Initialize Firebase
   readonly app = initializeApp(firebaseConfig);
   readonly pfpsRef = ref(getStorage(this.app), "pfps");
@@ -104,9 +110,12 @@ export class PfpContainerComponent implements OnInit {
     }
   }
 
-  filter(event: any) {
-    let nameFilter = event.target.value.trim().toLowerCase();
-    this.pfpsFiltered = this.pfps.filter(pfp => pfp.name.trim().toLowerCase().includes(nameFilter))
+  filter() {
+    console.log(this.pfps);
+    this.pfpsFiltered = this.pfps.filter(pfp => { 
+      return pfp.name.trim().toLowerCase().includes(this._titleFilter) 
+    });
+    this.pfpsFiltered.sort(Pfp.compareFn);
   }
 
   openFileExplorerDialog() {

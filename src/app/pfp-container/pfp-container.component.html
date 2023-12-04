@@ -10,7 +10,7 @@
                 src="../../assets/icons/Ares_big.png" (click)="currentSize = Size.LARGE">
         </div>
         <!-- Searchbar -->
-        <app-stuten-searchbar (keyup)="filter($event)"></app-stuten-searchbar>
+        <app-stuten-searchbar (keyup)="titleFilter = $event"></app-stuten-searchbar>
         <!-- End of line -->
         <div class="end-of-header-container">
             <h3 class="count-pfp">{{ pfpsFiltered.length }}/{{ pfps.length }}</h3>
@@ -28,6 +28,6 @@
 
     <!-- Filters div -->
     <div class="filters">
-
+        
     </div>
 </div>

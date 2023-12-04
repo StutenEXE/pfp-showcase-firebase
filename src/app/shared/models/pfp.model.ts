@@ -8,10 +8,8 @@ export class Pfp {
     size!: number;
     order!: number;
 
-    // getUrl(): string {
-    //     if (!this.name) {
-    //         return "error";
-    //     }
-    //     return firebaseConfig.imageTemplateUrl(this.name);
-    // }
+    static compareFn(pfp1: Pfp, pfp2: Pfp): number {
+        return pfp1 < pfp2 ? -1 : 
+        pfp1 > pfp2 ? 1 : 0;
+    }
 }
