@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faSortAlphaAsc, faSortAlphaDesc, faUpload } from '@fortawesome/free-solid-svg-icons';
 
 import { firebaseConfig } from '../../env/firebase.config';
 import { initializeApp } from "firebase/app";
@@ -20,8 +20,11 @@ export class PfpContainerComponent implements OnInit {
   // Allows the use of enum in HTML
   Size = Size;
   faUpload = faUpload;
+  faAscSort = faSortAlphaAsc;
+  faDescSort = faSortAlphaDesc;
 
   currentSize = Size.MEDIUM;
+  sortedAsc = true;
 
   _titleFilter: string = "";
   set titleFilter(event: any) {
@@ -115,7 +118,8 @@ export class PfpContainerComponent implements OnInit {
     this.pfpsFiltered = this.pfps.filter(pfp => { 
       return pfp.name.trim().toLowerCase().includes(this._titleFilter) 
     });
-    this.pfpsFiltered.sort(Pfp.compareFn);
+    this.pfpsFiltered.sort(Pfp.compareFn)
+    if (!this.sortedAsc) this.pfpsFiltered.reverse();
   }
 
   openFileExplorerDialog() {

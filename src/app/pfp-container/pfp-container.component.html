@@ -1,13 +1,14 @@
 <div>
     <div class="options">
         <!-- Sizing -->
-        <div class="size-icon-container">
+        <div class="left-icon-container">
             <img class="size-icon" [class]="currentSize == Size.SMALL ? 'selected' : ''"
                 src="../../assets/icons/Ares_small.png" (click)="currentSize = Size.SMALL" />
             <img class="size-icon" [class]="currentSize == Size.MEDIUM ? 'selected' : ''"
                 src="../../assets/icons/Ares_mid.png" (click)="currentSize = Size.MEDIUM" />
             <img class="size-icon" [class]="currentSize == Size.LARGE ? 'selected' : ''"
                 src="../../assets/icons/Ares_big.png" (click)="currentSize = Size.LARGE">
+            <fa-icon class="sort-icon" [icon]="sortedAsc ? faAscSort : faDescSort" (click)="sortedAsc = !sortedAsc; filter()"></fa-icon>
         </div>
         <!-- Searchbar -->
         <app-stuten-searchbar (keyup)="titleFilter = $event"></app-stuten-searchbar>
