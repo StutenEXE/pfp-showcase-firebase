@@ -22,7 +22,7 @@
         </div>
     </div>
     <div class="pfp-container">
-        <ng-container *ngFor="let pfp of pfpsFiltered.slice(0,1)">
+        <ng-container *ngFor="let pfp of pfpsFiltered">
             <app-pfp-box [pfp]="pfp" [size]="currentSize"></app-pfp-box>
         </ng-container>
     </div>

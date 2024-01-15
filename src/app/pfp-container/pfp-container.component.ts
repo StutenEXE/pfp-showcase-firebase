@@ -79,15 +79,7 @@ export class PfpContainerComponent implements OnInit {
                     // console.log(`${pfp.size} == ${metadata.size} : ${metadata.size == pfp.size}`)
                     pfp.size == metadata.size ? pfp.filename = pfpRef.name : 0
                   });
-                }).then(() => {
-                  this.pfps.forEach(pfp => {
-                    console.log(pfp.filename)
-                    const data = {
-                      pfps: arrayUnion(pfpConverter.toFirestore(pfp))
-                    }
-                    updateDoc(doc(this.firestore, "app", "pfps"), data)
-                  });
-                });
+                })
             })
           })
       )
