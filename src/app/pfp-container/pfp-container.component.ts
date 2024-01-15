@@ -146,8 +146,6 @@ export class PfpContainerComponent implements OnInit {
   }
 
   filter() {
-    this.currentSortStrategy = this.currentSortStrategy === SortStrategy.Neutral ? SortStrategy.Ascending
-      : this.currentSortStrategy === SortStrategy.Ascending ? SortStrategy.Descending : SortStrategy.Neutral
     this.pfpsFiltered = this.pfps.filter(pfp => {
       let nameOk = pfp.name.trim().toLowerCase().includes(this._searchBarFilter);
       let tagOk = pfp.tags.find(tag => tag.includes(this._searchBarFilter))

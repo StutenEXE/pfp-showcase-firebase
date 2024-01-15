@@ -9,8 +9,10 @@
             <img class="size-icon" [class]="currentSize == Size.LARGE ? 'selected' : ''"
                 src="../../assets/icons/Ares_big.png" (click)="currentSize = Size.LARGE">
             <fa-icon class="sort-icon" [icon]="currentSortStrategy === SortStrategy.Neutral ? faUnsorted : 
-                currentSortStrategy === SortStrategy.Ascending ? faAscSort : faDescSort" (click)="filter()"></fa-icon>
-            <select [(ngModel)]="currentSortType" (change)="currentSortStrategy = SortStrategy.Neutral; filter()"> 
+                currentSortStrategy === SortStrategy.Ascending ? faAscSort : faDescSort" 
+            (click)="this.currentSortStrategy = this.currentSortStrategy === SortStrategy.Neutral ? SortStrategy.Ascending
+                : this.currentSortStrategy === SortStrategy.Ascending ? SortStrategy.Descending : SortStrategy.Neutral;filter()"></fa-icon>
+            <select [(ngModel)]="currentSortType" (change)="currentSortStrategy = SortStrategy.Ascending; filter()"> 
                 <option *ngFor="let sortTypeValue of sortTypeValues" [value]="sortTypeValue">{{ sortTypeValue }}</option> 
             </select>
         </div>
