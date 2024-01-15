@@ -8,14 +8,19 @@
                 src="../../assets/icons/Ares_mid.png" (click)="currentSize = Size.MEDIUM" />
             <img class="size-icon" [class]="currentSize == Size.LARGE ? 'selected' : ''"
                 src="../../assets/icons/Ares_big.png" (click)="currentSize = Size.LARGE">
-            <fa-icon class="sort-icon" [icon]="sortedAsc ? faAscSort : faDescSort" (click)="sortedAsc = !sortedAsc; filter()"></fa-icon>
+            <fa-icon class="sort-icon" [icon]="currentSortStrategy === SortStrategy.Neutral ? faUnsorted : 
+                currentSortStrategy === SortStrategy.Ascending ? faAscSort : faDescSort" (click)="filter()"></fa-icon>
+            <select [(ngModel)]="currentSortType" (change)="currentSortStrategy = SortStrategy.Neutral; filter()"> 
+                <option *ngFor="let sortTypeValue of sortTypeValues" [value]="sortTypeValue">{{ sortTypeValue }}</option> 
+            </select>
         </div>
         <!-- Searchbar -->
-        <app-stuten-searchbar (keyup)="titleFilter = $event"></app-stuten-searchbar>
+        <app-stuten-searchbar (keyup)="searchBarFilter = $event"></app-stuten-searchbar>
         <!-- End of line -->
         <div class="end-of-header-container">
             <h3 class="count-pfp">{{ pfpsFiltered.length }}/{{ pfps.length }}</h3>
-            <input id="uploadPfpInput" type="file" accept="image/png, image/jpeg, image/gif" (change)="uploadFile($event)">
+            <input id="uploadPfpInput" type="file" accept="image/png, image/jpeg, image/gif"
+                (change)="uploadFile($event)">
             <button class="uploadPfpButton" (click)="openFileExplorerDialog()">
                 <fa-icon [icon]="faUpload" onclick="document.getElementById('selectPfp').click();"></fa-icon>
             </button>
@@ -29,6 +34,6 @@
 
     <!-- Filters div -->
     <div class="filters">
-        
+
     </div>
 </div>

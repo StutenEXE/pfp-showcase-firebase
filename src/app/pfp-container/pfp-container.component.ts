@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { faSortAlphaAsc, faSortAlphaDesc, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faSort, faSortDown, faSortUp, faUpload } from '@fortawesome/free-solid-svg-icons';
 
 import { firebaseConfig } from '../../env/firebase.config';
 import { initializeApp } from "firebase/app";
@@ -12,6 +12,18 @@ import { IdentityDialogComponent } from '../shared/component/identity-dialog/ide
 import { doc, getFirestore, getDoc, arrayUnion, setDoc, addDoc, updateDoc, QueryDocumentSnapshot } from 'firebase/firestore';
 
 
+enum SortStrategy {
+  Neutral,
+  Ascending,
+  Descending,
+}
+enum SortType {
+  None = "None",
+  Name = "Name",
+  UploadDate = "Upload date",
+  FileSize = "File size",
+}
+
 @Component({
   selector: 'app-pfp-container',
   templateUrl: './pfp-container.component.html',
@@ -20,16 +32,21 @@ import { doc, getFirestore, getDoc, arrayUnion, setDoc, addDoc, updateDoc, Query
 export class PfpContainerComponent implements OnInit {
   // Allows the use of enum in HTML
   Size = Size;
+  SortStrategy = SortStrategy;
+  SortType = SortType;
+  sortTypeValues = Object.values(SortType);
   faUpload = faUpload;
-  faAscSort = faSortAlphaAsc;
-  faDescSort = faSortAlphaDesc;
+  faUnsorted = faSort;
+  faAscSort = faSortDown;
+  faDescSort = faSortUp;
 
   currentSize = Size.MEDIUM;
-  sortedAsc = true;
+  currentSortStrategy = SortStrategy.Neutral;
+  currentSortType = SortType.None;
 
-  _titleFilter: string = "";
-  set titleFilter(event: any) {
-    this._titleFilter = event.target.value.toLowerCase();
+  _searchBarFilter: string = "";
+  set searchBarFilter(event: any) {
+    this._searchBarFilter = event.target.value.toLowerCase();
     this.filter()
   }
 
@@ -129,11 +146,29 @@ export class PfpContainerComponent implements OnInit {
   }
 
   filter() {
+    this.currentSortStrategy = this.currentSortStrategy === SortStrategy.Neutral ? SortStrategy.Ascending
+      : this.currentSortStrategy === SortStrategy.Ascending ? SortStrategy.Descending : SortStrategy.Neutral
     this.pfpsFiltered = this.pfps.filter(pfp => {
-      return pfp.name.trim().toLowerCase().includes(this._titleFilter)
+      let nameOk = pfp.name.trim().toLowerCase().includes(this._searchBarFilter);
+      let tagOk = pfp.tags.find(tag => tag.includes(this._searchBarFilter))
+      return nameOk || tagOk
     });
-    this.pfpsFiltered.sort(Pfp.compareFn)
-    if (!this.sortedAsc) this.pfpsFiltered.reverse();
+    let sortingStrategy;
+    if (this.currentSortStrategy === SortStrategy.Neutral || this.currentSortType === SortType.None) {
+      sortingStrategy = Pfp.compareFnOrder
+    }
+    else {
+      switch (this.currentSortType) {
+        case SortType.Name:
+          sortingStrategy = Pfp.compareFnName; break;
+        case SortType.UploadDate:
+          sortingStrategy = Pfp.compareFnUploadDate; break;
+        case SortType.FileSize:
+          sortingStrategy = Pfp.compareFnFileSize; break;
+      }
+    }
+    this.pfpsFiltered.sort(sortingStrategy)
+    if (this.currentSortStrategy === SortStrategy.Descending) this.pfpsFiltered.reverse();
   }
 
   openFileExplorerDialog() {

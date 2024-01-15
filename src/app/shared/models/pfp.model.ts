@@ -22,9 +22,24 @@ export class Pfp {
         this.alternates = alternates;
     }   
 
-    static compareFn(pfp1: Pfp, pfp2: Pfp): number {
-        return pfp1 < pfp2 ? -1 : 
-        pfp1 > pfp2 ? 1 : 0;
+    static compareFnName(pfp1: Pfp, pfp2: Pfp): number {
+        return pfp1.name < pfp2.name ? -1 : 
+        pfp1.name > pfp2.name ? 1 : 0;
+    }
+    
+    static compareFnUploadDate(pfp1: Pfp, pfp2: Pfp): number {
+        return pfp1.uploadDate < pfp2.uploadDate ? -1 : 
+        pfp1.uploadDate > pfp2.uploadDate ? 1 : 0;
+    }
+    
+    static compareFnFileSize(pfp1: Pfp, pfp2: Pfp): number {
+        return pfp1.size < pfp2.size ? -1 : 
+        pfp1.size > pfp2.size ? 1 : 0;
+    }
+    
+    static compareFnOrder(pfp1: Pfp, pfp2: Pfp): number {
+        return pfp1.order < pfp2.order ? -1 : 
+        pfp1.order > pfp2.order ? 1 : 0;
     }
 }
 
@@ -43,6 +58,6 @@ export const pfpConverter = {
     },
     fromFirestore: (snapshot: any) => {
         const data = snapshot;
-        return new Pfp(data['name'], data['filename'], data['url'], data['uploadDate'], data['size'], data['order'], data['tags'], data['alternates'])
+        return new Pfp(data['name'], data['filename'], data['url'], new Date(data['uploadDate'].seconds * 1000), data['size'], data['order'], data['tags'], data['alternates'])
     }
 };
