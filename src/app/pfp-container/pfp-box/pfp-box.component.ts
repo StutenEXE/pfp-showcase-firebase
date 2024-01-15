@@ -19,15 +19,18 @@ export class PfpBoxComponent implements OnInit {
 
   downloadUrl!: SafeResourceUrl;
 
-  constructor(private sanitizer: DomSanitizer) {}
+  constructor(private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
-    getBlob(ref(getStorage(), `pfps/${this.pfp.name}`))
-      .then((blob) => {
-        this.downloadUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
-      })
-      .catch((error) => {
-        alert("Cannot find image")
-      });
+    if (this.pfp.filename) {
+      getBlob(ref(getStorage(), `pfps/${this.pfp.filename}`))
+        .then((blob) => {
+          this.downloadUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+        })
+        .catch((error) => {
+          alert("Cannot find image")
+        });
+    }
   }
+
 } 

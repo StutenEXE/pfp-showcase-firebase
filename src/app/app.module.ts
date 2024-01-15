@@ -13,7 +13,6 @@ import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +31,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     MatDialogModule,
     FontAwesomeModule,
   ],
-  providers: [ ],
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

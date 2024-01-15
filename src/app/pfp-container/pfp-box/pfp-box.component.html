@@ -19,9 +19,10 @@
                 <h3>Date : {{ pfp.uploadDate | date:"dd/MM/yyyy" }}</h3>
                 <h3>Size : {{ pfp.size }} bytes</h3>
             </div>
-            <a class="huge-download" (click)="$event.stopPropagation()" [href]="downloadUrl" [download]="pfp.name">
+            <a *ngIf="downloadUrl" class="huge-download" (click)="$event.stopPropagation()" [href]="downloadUrl"
+                [download]="pfp.name">
                 Download
-            </a>
+                s</a>
         </div>
     </div>
 </div>

@@ -1,15 +1,28 @@
 import { Component, OnInit } from '@angular/core';
-import { faSortAlphaAsc, faSortAlphaDesc, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faSort, faSortDown, faSortUp, faUpload } from '@fortawesome/free-solid-svg-icons';
 
 import { firebaseConfig } from '../../env/firebase.config';
 import { initializeApp } from "firebase/app";
-import { getStorage, ref, listAll, getMetadata, getDownloadURL, uploadBytes, UploadMetadata } from "firebase/storage";
-import { Pfp } from '../shared/models/pfp.model';
+import { getStorage, ref, listAll, getMetadata, getDownloadURL, uploadBytes } from "firebase/storage";
+import { Pfp, pfpConverter } from '../shared/models/pfp.model';
 import { Size } from '../shared/models/size.enum';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { IdentityDialogComponent } from '../shared/component/identity-dialog/identity-dialog.component';
+import { doc, getFirestore, getDoc, arrayUnion, setDoc, addDoc, updateDoc, QueryDocumentSnapshot } from 'firebase/firestore';
 
+
+enum SortStrategy {
+  Neutral,
+  Ascending,
+  Descending,
+}
+enum SortType {
+  None = "None",
+  Name = "Name",
+  UploadDate = "Upload date",
+  FileSize = "File size",
+}
 
 @Component({
   selector: 'app-pfp-container',
@@ -19,22 +32,28 @@ import { IdentityDialogComponent } from '../shared/component/identity-dialog/ide
 export class PfpContainerComponent implements OnInit {
   // Allows the use of enum in HTML
   Size = Size;
+  SortStrategy = SortStrategy;
+  SortType = SortType;
+  sortTypeValues = Object.values(SortType);
   faUpload = faUpload;
-  faAscSort = faSortAlphaAsc;
-  faDescSort = faSortAlphaDesc;
+  faUnsorted = faSort;
+  faAscSort = faSortDown;
+  faDescSort = faSortUp;
 
   currentSize = Size.MEDIUM;
-  sortedAsc = true;
+  currentSortStrategy = SortStrategy.Neutral;
+  currentSortType = SortType.None;
 
-  _titleFilter: string = "";
-  set titleFilter(event: any) {
-    this._titleFilter = event.target.value.toLowerCase();
+  _searchBarFilter: string = "";
+  set searchBarFilter(event: any) {
+    this._searchBarFilter = event.target.value.toLowerCase();
     this.filter()
   }
 
   // Initialize Firebase
   readonly app = initializeApp(firebaseConfig);
   readonly pfpsRef = ref(getStorage(this.app), "pfps");
+  readonly firestore = getFirestore(this.app);
 
   pfps: Pfp[] = [];
   pfpsFiltered: Pfp[] = [];
@@ -44,32 +63,45 @@ export class PfpContainerComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPfps()
+    // let res = doc(this.firestore, "app", "tags")
+    // getDoc(res).then(info => console.log(info.data()))
+
+    // this.pfps.forEach(pfp => {
+    //   console.log(pfp)
+    //   const data = {
+    //     pfps: arrayUnion(pfpConverter.toFirestore(pfp))
+    //   }
+    //   updateDoc(doc(this.firestore, "app", "pfps"), data)
+
+    // })
   }
 
   loadPfps() {
     this.pfps = [];
 
-    listAll(this.pfpsRef)
-      .then(pfps => {
-        pfps.items.forEach(pfpRef => {
-          let pfp = new Pfp();
-          pfp.name = pfpRef.name;
+    getDoc(doc(this.firestore, "app", "pfps"))
+      .then(data => {
+        data.data()?.['pfps'].forEach((pfp: any) => {
+          this.pfps.push(pfpConverter.fromFirestore(pfp))
+        })
+      }
+      )
+      .then(() =>
+        listAll(this.pfpsRef)
+          .then(pfps => {
+            pfps.items.forEach(pfpRef => {
+              getMetadata(pfpRef)
+                .then(metadata => {
+                  this.pfps.forEach(pfp => {
+                    // console.log(`${pfp.size} == ${metadata.size} : ${metadata.size == pfp.size}`)
+                    pfp.size == metadata.size ? pfp.filename = pfpRef.name : 0
+                  });
+                })
+            })
+          })
+      )
 
-          getDownloadURL(pfpRef)
-            .then(url => {
-              pfp.url = url
-            });
 
-          getMetadata(pfpRef)
-            .then(metadata => {
-              pfp.uploadDate = new Date(metadata.timeCreated)
-              pfp.size = metadata.size
-              // Cache control contains an order for the pfpz
-              pfp.order = Number(metadata.cacheControl)
-            });
-          this.pfps.push(pfp);
-        });
-      })
     this.pfpsFiltered = this.pfps;
   }
 
@@ -114,12 +146,29 @@ export class PfpContainerComponent implements OnInit {
   }
 
   filter() {
-    console.log(this.pfps);
-    this.pfpsFiltered = this.pfps.filter(pfp => { 
-      return pfp.name.trim().toLowerCase().includes(this._titleFilter) 
+    this.currentSortStrategy = this.currentSortStrategy === SortStrategy.Neutral ? SortStrategy.Ascending
+      : this.currentSortStrategy === SortStrategy.Ascending ? SortStrategy.Descending : SortStrategy.Neutral
+    this.pfpsFiltered = this.pfps.filter(pfp => {
+      let nameOk = pfp.name.trim().toLowerCase().includes(this._searchBarFilter);
+      let tagOk = pfp.tags.find(tag => tag.includes(this._searchBarFilter))
+      return nameOk || tagOk
     });
-    this.pfpsFiltered.sort(Pfp.compareFn)
-    if (!this.sortedAsc) this.pfpsFiltered.reverse();
+    let sortingStrategy;
+    if (this.currentSortStrategy === SortStrategy.Neutral || this.currentSortType === SortType.None) {
+      sortingStrategy = Pfp.compareFnOrder
+    }
+    else {
+      switch (this.currentSortType) {
+        case SortType.Name:
+          sortingStrategy = Pfp.compareFnName; break;
+        case SortType.UploadDate:
+          sortingStrategy = Pfp.compareFnUploadDate; break;
+        case SortType.FileSize:
+          sortingStrategy = Pfp.compareFnFileSize; break;
+      }
+    }
+    this.pfpsFiltered.sort(sortingStrategy)
+    if (this.currentSortStrategy === SortStrategy.Descending) this.pfpsFiltered.reverse();
   }
 
   openFileExplorerDialog() {
