@@ -5,7 +5,7 @@
 
     <div class="pfp-box-details">
         <p>Name : {{ pfp.name }}</p>
-        <p>Date : {{ pfp.uploadDate | date:"dd/MM/yyyy" }}</p>
+        <p>Date : {{ pfp.uploadDate }}</p> <!--| date:"dd/MM/yyyy" }}</p>-->
         <p>Size : {{ pfp.size }} bytes</p>
     </div>
 </div>
@@ -16,12 +16,13 @@
         <div class="huge-pfp-box-details">
             <div class="huge-info">
                 <h3>Name : {{ pfp.name }}</h3>
-                <h3>Date : {{ pfp.uploadDate | date:"dd/MM/yyyy" }}</h3>
+                <h3>Date : {{ pfp.uploadDate }} </h3><!-- | date:"dd/MM/yyyy" }}</h3> -->
                 <h3>Size : {{ pfp.size }} bytes</h3>
             </div>
-            <a class="huge-download" (click)="$event.stopPropagation()" [href]="downloadUrl" [download]="pfp.name">
+            <a *ngIf="downloadUrl" class="huge-download" (click)="$event.stopPropagation()" [href]="downloadUrl"
+                [download]="pfp.name">
                 Download
-            </a>
+                s</a>
         </div>
     </div>
 </div>
