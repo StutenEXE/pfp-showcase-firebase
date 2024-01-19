@@ -49,7 +49,7 @@ export const pfpConverter = {
             name: pfp.name,
             filename: pfp.filename,
             url: pfp.url,
-            uploadDate: pfp.uploadDate,
+            uploadDate: pfp.uploadDate.getTime(),
             size: pfp.size,
             order: pfp.order,
             tags: pfp.tags,
@@ -58,6 +58,6 @@ export const pfpConverter = {
     },
     fromFirestore: (snapshot: any) => {
         const data = snapshot;
-        return new Pfp(data['name'], data['filename'], data['url'], new Date(data['uploadDate'].seconds * 1000), data['size'], data['order'], data['tags'], data['alternates'])
+        return new Pfp(data['name'], data['filename'], data['url'], new Date(data['uploadDate']), data['size'], data['order'], data['tags'], data['alternates'])
     }
 };

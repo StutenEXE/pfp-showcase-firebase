@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { IdentityDialogComponent } from '../shared/component/identity-dialog/identity-dialog.component';
 import { doc, getFirestore, getDoc, arrayUnion, setDoc, addDoc, updateDoc, QueryDocumentSnapshot } from 'firebase/firestore';
+import { DateAdapter } from '@angular/material/core';
 
 
 enum SortStrategy {
@@ -63,17 +64,6 @@ export class PfpContainerComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPfps()
-    // let res = doc(this.firestore, "app", "tags")
-    // getDoc(res).then(info => console.log(info.data()))
-
-    // this.pfps.forEach(pfp => {
-    //   console.log(pfp)
-    //   const data = {
-    //     pfps: arrayUnion(pfpConverter.toFirestore(pfp))
-    //   }
-    //   updateDoc(doc(this.firestore, "app", "pfps"), data)
-
-    // })
   }
 
   loadPfps() {
@@ -86,22 +76,6 @@ export class PfpContainerComponent implements OnInit {
         })
       }
       )
-      .then(() =>
-        listAll(this.pfpsRef)
-          .then(pfps => {
-            pfps.items.forEach(pfpRef => {
-              getMetadata(pfpRef)
-                .then(metadata => {
-                  this.pfps.forEach(pfp => {
-                    // console.log(`${pfp.size} == ${metadata.size} : ${metadata.size == pfp.size}`)
-                    pfp.size == metadata.size ? pfp.filename = pfpRef.name : 0
-                  });
-                })
-            })
-          })
-      )
-
-
     this.pfpsFiltered = this.pfps;
   }
 
@@ -126,7 +100,12 @@ export class PfpContainerComponent implements OnInit {
               if (reader.result) {
                 const blob = new Blob([reader.result], { type: file.type });
                 uploadBytes(ref(getStorage(this.app), `pfps/${file.name}`), blob).then((snapshot) => {
-                  this.loadPfps();
+                  getDownloadURL(snapshot.ref).then(url => {
+                    let pfp = new Pfp(snapshot.ref.name.split(".")[0], snapshot.ref.name, url, new Date(snapshot.metadata.timeCreated), snapshot.metadata.size, this.pfps.length, [], [])
+                    updateDoc(doc(this.firestore, "app", "pfps"), { pfps: arrayUnion(pfpConverter.toFirestore(pfp)) }).then(
+                      () => this.loadPfps()
+                    )
+                  })
                 })
                   // Upload succesful
                   .then(() => this.snackBar.open('File uploaded succesfully !', undefined, { duration: 3000, panelClass: ["ok-snackbar"] }))
@@ -153,7 +132,8 @@ export class PfpContainerComponent implements OnInit {
     });
     let sortingStrategy;
     if (this.currentSortStrategy === SortStrategy.Neutral || this.currentSortType === SortType.None) {
-      sortingStrategy = Pfp.compareFnOrder
+      this.currentSortStrategy = SortStrategy.Neutral;
+      sortingStrategy = Pfp.compareFnOrder;
     }
     else {
       switch (this.currentSortType) {
