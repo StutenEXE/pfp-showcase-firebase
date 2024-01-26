@@ -9,7 +9,7 @@ import { Size } from '../shared/models/size.enum';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { IdentityDialogComponent } from '../shared/component/identity-dialog/identity-dialog.component';
-import { doc, getFirestore, getDoc, arrayUnion, setDoc, addDoc, updateDoc, QueryDocumentSnapshot } from 'firebase/firestore';
+import { doc, getFirestore, getDoc, arrayUnion, setDoc, addDoc, updateDoc, QueryDocumentSnapshot, collection, getDocs } from 'firebase/firestore';
 import { DateAdapter } from '@angular/material/core';
 
 
@@ -69,13 +69,15 @@ export class PfpContainerComponent implements OnInit {
   loadPfps() {
     this.pfps = [];
 
-    getDoc(doc(this.firestore, "app", "pfps"))
+    getDocs(collection(this.firestore, "app/pfps/pfps_obj"))
       .then(data => {
-        data.data()?.['pfps'].forEach((pfp: any) => {
-          this.pfps.push(pfpConverter.fromFirestore(pfp))
+        data.docs.forEach((doc: any) => {
+          let pfp = pfpConverter.fromFirestore(doc.data())
+          pfp.id = doc.id
+          this.pfps.push(pfp)
         })
       }
-      )
+    )
     this.pfpsFiltered = this.pfps;
   }
 
@@ -100,11 +102,12 @@ export class PfpContainerComponent implements OnInit {
               if (reader.result) {
                 const blob = new Blob([reader.result], { type: file.type });
                 uploadBytes(ref(getStorage(this.app), `pfps/${file.name}`), blob).then((snapshot) => {
-                  getDownloadURL(snapshot.ref).then(url => {
+                  getDownloadURL(snapshot.ref).then(async url => {
                     let pfp = new Pfp(snapshot.ref.name.split(".")[0], snapshot.ref.name, url, new Date(snapshot.metadata.timeCreated), snapshot.metadata.size, this.pfps.length, [], [])
-                    updateDoc(doc(this.firestore, "app", "pfps"), { pfps: arrayUnion(pfpConverter.toFirestore(pfp)) }).then(
-                      () => this.loadPfps()
-                    )
+                    let ref = await addDoc(collection(this.firestore, "app/pfps/pfps_obj"), pfpConverter.toFirestore(pfp))
+                    pfp.id = ref.id
+                    this.pfps.push(pfp)
+                    this.filter()
                   })
                 })
                   // Upload succesful
@@ -149,9 +152,12 @@ export class PfpContainerComponent implements OnInit {
     if (this.currentSortStrategy === SortStrategy.Descending) this.pfpsFiltered.reverse();
   }
 
-  openFileExplorerDialog() {
+  async openFileExplorerDialog() {
+    for (let pfp of this.pfps) {
+      let ref = await addDoc(collection(this.firestore, "app/pfps/pfps_obj"), pfpConverter.toFirestore(pfp))
+      pfp.id = ref.id;
+    }
     document.getElementById('uploadPfpInput')?.click();
   }
-
 }
 
