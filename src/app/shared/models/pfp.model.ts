@@ -1,6 +1,7 @@
 import { QueryDocumentSnapshot, SnapshotOptions } from "firebase/firestore";
 
 export class Pfp {
+    id!: string;
     name!: string;
     filename!: string;
     url!: string;
