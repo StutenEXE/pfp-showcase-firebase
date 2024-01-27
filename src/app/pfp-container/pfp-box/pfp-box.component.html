@@ -1,4 +1,4 @@
-<div class="pfp-box-frame" [class]="size" (click)="showHuge = true">
+<div class="pfp-box-frame" [class]="size" (click)="showHuge = true" [routerLink]="pfp.id">
     <img *ngIf="pfp.url" class="pfp-box" [class]="size" [src]="pfp.url"
         [alt]="'Couldn\'t find the following pfp : ' + pfp.name" />
     <p *ngIf="!pfp.url" class="pfp-box">Loading...</p>

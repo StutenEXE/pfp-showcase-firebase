@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
 import { PfpContainerComponent } from './pfp-container/pfp-container.component';
@@ -12,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { routes } from './app.routes';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   ],
   imports: [
     CommonModule,
+    RouterModule.forRoot(routes),
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
