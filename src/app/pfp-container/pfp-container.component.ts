@@ -78,6 +78,14 @@ export class PfpContainerComponent implements OnInit {
         })
       }
     )
+    // getDoc(doc(this.firestore, "app", "pfps")).then(data => {
+    //   let info = data.data();
+    //   if (info !== undefined) {
+    //     for(let pfp of info['pfps']) {
+    //       this.pfps.push(pfpConverter.fromFirestore(pfp))
+    //     }
+    //   }
+    // })
     this.pfpsFiltered = this.pfps;
   }
 
@@ -153,10 +161,10 @@ export class PfpContainerComponent implements OnInit {
   }
 
   async openFileExplorerDialog() {
-    for (let pfp of this.pfps) {
-      let ref = await addDoc(collection(this.firestore, "app/pfps/pfps_obj"), pfpConverter.toFirestore(pfp))
-      pfp.id = ref.id;
-    }
+    // for (let pfp of this.pfps) {
+    //   let ref = await addDoc(collection(this.firestore, "app/pfps/pfps_obj"), pfpConverter.toFirestore(pfp))
+    //   pfp.id = ref.id;
+    // }
     document.getElementById('uploadPfpInput')?.click();
   }
 }
