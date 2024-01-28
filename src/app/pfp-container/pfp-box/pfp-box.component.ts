@@ -3,8 +3,7 @@ import { Pfp } from '../../shared/models/pfp.model';
 import { Size } from '../../shared/models/size.enum';
 import { getStorage, ref, getBlob } from "firebase/storage";
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-
-
+import { BytesPipe } from '../../shared/utils/bytes-pipe';
 
 @Component({
   selector: 'app-pfp-box',

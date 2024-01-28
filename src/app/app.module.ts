@@ -14,27 +14,29 @@ import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { routes } from './app.routes';
+import { BytesPipe } from "./shared/utils/bytes-pipe";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    PfpContainerComponent,
-    PfpBoxComponent,
-    StutenSearchbarComponent,
-    IdentityDialogComponent,
-  ],
-  imports: [
-    CommonModule,
-    RouterModule.forRoot(routes),
-    BrowserModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDialogModule,
-    FontAwesomeModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        PfpContainerComponent,
+        PfpBoxComponent,
+        StutenSearchbarComponent,
+        IdentityDialogComponent,
+    ],
+    providers: [],
+    bootstrap: [AppComponent],
+    imports: [
+        CommonModule,
+        RouterModule.forRoot(routes),
+        BrowserModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatDialogModule,
+        FontAwesomeModule,
+        BytesPipe
+    ]
 })
 export class AppModule { }

@@ -1,1 +1,15 @@
-<p>test: {{ test }}</p>
+<div id="pfp-container" *ngIf="pfp">
+    <div id="pfp-img-container">
+        <img [src]="pfp.url" [alt]="'Cannot find : ' + pfp.filename" />
+        <div id="alernates-container">
+            <div *ngFor="let alt of pfp.alternates">
+                <img [src]="alt">
+            </div>
+        </div>
+    </div>
+    <div id="#details-container">
+        <h2>Name : {{ pfp.name }}</h2>
+        <h2>Date : {{ pfp.uploadDate | date:"dd/MM/yyyy" }}</h2>
+        <h2>Size : {{ pfp.size | bytesPipe }}</h2>
+    </div>
+</div>

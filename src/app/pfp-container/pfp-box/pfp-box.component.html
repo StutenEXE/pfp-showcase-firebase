@@ -6,7 +6,7 @@
     <div class="pfp-box-details">
         <p>Name : {{ pfp.name }}</p>
         <p>Date : {{ pfp.uploadDate | date:"dd/MM/yyyy" }}</p>
-        <p>Size : {{ pfp.size }} bytes</p>
+        <p>Size : {{ pfp.size | bytesPipe }}</p>
     </div>
 </div>
 <!-- Huge pfp -->
