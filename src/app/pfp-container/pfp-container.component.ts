@@ -10,7 +10,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { IdentityDialogComponent } from '../shared/component/identity-dialog/identity-dialog.component';
 import { doc, getFirestore, getDoc, arrayUnion, setDoc, addDoc, updateDoc, QueryDocumentSnapshot, collection, getDocs } from 'firebase/firestore';
-import { DateAdapter } from '@angular/material/core';
 
 
 enum SortStrategy {
